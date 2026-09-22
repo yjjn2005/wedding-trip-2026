@@ -88,6 +88,7 @@ const WAYPOINTS = {
   lucerne: [47.0501682, 8.3093072],
   interlaken: [46.6863481, 7.8632049],
   grindelwald: [46.624164, 8.0413962], jungfraujoch: [46.5474576, 7.9821133],
+  spiez: [46.6866561, 7.6799274], milano: [45.4640976, 9.1919265],
   firenze: [43.773145, 11.2559602],
   roma: [41.8991328, 12.4732921], vatican: [41.9064878, 12.4536413],
 };
@@ -95,13 +96,13 @@ const WAYPOINTS = {
 // 도시 밖(당일투어) 지점만 지도에 보조 점으로 표시할 때 쓰는 표시명
 const WAYPOINT_LABELS = {
   versailles: "베르사유궁전", basel: "바젤(경유)", interlaken: "인터라켄(경유)",
-  jungfraujoch: "융프라우요흐(Top of Europe)", vatican: "바티칸",
+  jungfraujoch: "융프라우요흐(Top of Europe)", spiez: "슈피츠(경유)", milano: "밀라노(경유)", vatican: "바티칸",
 };
 
 // 지도 탭의 "지역별 상세 보기" 버튼에 쓰이는 그룹 (허브 도시 + 당일투어 지점 id)
 const REGION_MAP_GROUPS = [
   { label: "프랑스", ids: ["paris", "versailles"] },
-  { label: "스위스", ids: ["lucerne", "interlaken", "grindelwald", "jungfraujoch", "basel"] },
+  { label: "스위스", ids: ["lucerne", "interlaken", "grindelwald", "jungfraujoch", "basel", "spiez"] },
   { label: "이탈리아", ids: ["firenze", "roma", "vatican"] },
 ];
 
@@ -114,7 +115,7 @@ const DAY_ROUTES = {
   "2026-11-18": ["paris", "basel", "lucerne"],
   "2026-11-19": ["lucerne", "interlaken", "grindelwald"],
   "2026-11-20": ["grindelwald", "jungfraujoch", "grindelwald"],
-  "2026-11-21": ["grindelwald", "interlaken", "firenze"],
+  "2026-11-21": ["grindelwald", "interlaken", "spiez", "milano", "firenze"],
   "2026-11-22": ["firenze", "roma"],
   "2026-11-23": ["roma", "vatican", "roma"],
   "2026-11-24": ["roma"],
