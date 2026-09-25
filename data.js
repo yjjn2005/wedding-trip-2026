@@ -91,12 +91,30 @@ const WAYPOINTS = {
   spiez: [46.6866561, 7.6799274], milano: [45.4640976, 9.1919265],
   firenze: [43.773145, 11.2559602],
   roma: [41.8991328, 12.4732921], vatican: [41.9064878, 12.4536413],
+  cdg_airport: [49.0078827, 2.5507855], fco_airport: [41.8034632, 12.2519211],
 };
 
 // 도시 밖(당일투어) 지점만 지도에 보조 점으로 표시할 때 쓰는 표시명
 const WAYPOINT_LABELS = {
   versailles: "베르사유궁전", basel: "바젤(경유)", interlaken: "인터라켄(경유)",
   jungfraujoch: "융프라우요흐(Top of Europe)", spiez: "슈피츠(경유)", milano: "밀라노(경유)", vatican: "바티칸",
+  cdg_airport: "파리 샤를드골 공항(입국)", fco_airport: "로마 피우미치노 공항(출국)",
+};
+
+// 지도 마커 표시·경로선 국가간/국내 판정에 쓰이는 웨이포인트 id → 국가 매핑
+const WAYPOINT_NATION = {
+  paris: "프랑스", versailles: "프랑스",
+  lucerne: "스위스", grindelwald: "스위스", basel: "스위스", interlaken: "스위스", jungfraujoch: "스위스", spiez: "스위스",
+  firenze: "이탈리아", roma: "이탈리아", vatican: "이탈리아", milano: "이탈리아",
+  cdg_airport: "프랑스", fco_airport: "이탈리아",
+};
+
+// 지도 마커 분류: H=호텔(숙박 거점), P=여행지(관광명소), T=대중교통(경유지), A=공항
+// 식당(E)은 원본 견적서에 특정 식당명·위치가 없어 이번에는 표시하지 않았습니다.
+const WAYPOINT_CATEGORY = {
+  versailles: "P", jungfraujoch: "P", vatican: "P",
+  basel: "T", interlaken: "T", spiez: "T", milano: "T",
+  cdg_airport: "A", fco_airport: "A",
 };
 
 // 지도 탭의 "지역별 상세 보기" 버튼에 쓰이는 그룹 (허브 도시 + 당일투어 지점 id)
