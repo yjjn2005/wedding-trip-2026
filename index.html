@@ -32,15 +32,6 @@
     </div>
   </header>
 
-  <nav class="tabbar">
-    <button data-view="view-overview" class="active"><span class="ic">📖</span>개요</button>
-    <button data-view="view-map"><span class="ic">🗺️</span>지도</button>
-    <button data-view="view-daily"><span class="ic">📅</span>일정</button>
-    <button data-view="view-budget"><span class="ic">💰</span>예산</button>
-    <button data-view="view-checklist"><span class="ic">✅</span>체크</button>
-    <button data-view="view-address"><span class="ic">📍</span>주소</button>
-    <button data-view="view-settings"><span class="ic">⚙️</span>설정</button>
-  </nav>
 </div>
 
 <div class="app-shell">
@@ -48,6 +39,7 @@
   <!-- 개요 -->
   <section id="view-overview" class="view active">
     <h2 class="section-title">여행 개요</h2>
+    <div class="today-card" id="todayCard"></div>
     <div class="kv-list" id="overviewKV"></div>
 
     <h2 class="section-title">설계 원칙</h2>
@@ -60,7 +52,7 @@
   <!-- 지도 -->
   <section id="view-map" class="view">
     <h2 class="section-title">이동경로 지도</h2>
-    <p class="section-note">번호는 방문 순서(1a·1b…)입니다. 파란선은 하루→다음날 이동, 빨간선은 당일 오전·오후·저녁 동선(당일투어 왕복)입니다.</p>
+    <p class="section-note">핀의 D1·D2…는 방문 일차입니다. 빨간 화살표는 국가 간 이동, 파란선은 같은 나라 안 이동입니다.</p>
     <div class="day-filters" id="mapRegionTabs"></div>
     <div class="map-wrap" id="mapWrap">
       <button id="mapFullscreenBtn" class="map-fullscreen-btn" aria-label="지도 전체화면">
@@ -100,8 +92,8 @@
 
   <!-- 주소록 -->
   <section id="view-address" class="view">
-    <h2 class="section-title">숙박 예약표 & 주소록</h2>
-    <p class="section-note">숙박 예약표는 체크인·아웃·권장지역·1박예산 계획안입니다. 주소는 Uber·현지 택시 앱에 그대로 복사해 입력하실 수 있습니다.</p>
+    <h2 class="section-title">숙박표 & 주소록</h2>
+    <p class="section-note">숙박표는 일정표 기준 도시별 숙소와 체크인·아웃 날짜입니다(예약 확정 여부는 표시하지 않습니다). 주소는 Uber·현지 택시 앱에 그대로 복사해 입력하실 수 있습니다.</p>
     <div id="accommodationsTable" style="margin-bottom:20px;"></div>
     <div id="addressList"></div>
   </section>
@@ -126,6 +118,18 @@
   </section>
 
 </div>
+
+<p class="upd"><span class="i-badge">I</span>Instinct 제작 · 최종 업데이트 <span id="updDate"></span></p>
+
+  <nav class="tabbar">
+    <button data-view="view-overview" class="active"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h7a3 3 0 0 1 3 3v11a2 2 0 0 0-2-2H4zM20 5h-7a3 3 0 0 0-3 3v11a2 2 0 0 1 2-2h8z"/></svg>개요</button>
+    <button data-view="view-map"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.500-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></svg>지도</button>
+    <button data-view="view-daily"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>일정</button>
+    <button data-view="view-budget"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 7v10M9.500 9.500c0-1 1-1.500 2.500-1.500s2.500.7 2.500 1.700-1 1.500-2.500 1.800-2.500.8-2.500 1.800 1 1.700 2.500 1.700 2.500-.6 2.500-1.500"/></svg>예산</button>
+    <button data-view="view-checklist"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg>체크</button>
+    <button data-view="view-address"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V8l8-4 8 4v12M9 20v-6h6v6"/></svg>주소</button>
+    <button data-view="view-settings"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.600 5.600l2.100 2.100M16.300 16.300l2.100 2.100M5.600 18.400l2.100-2.100M16.300 7.700l2.100-2.100"/></svg>설정</button>
+  </nav>
 
 <script src="./config.js"></script>
 <script src="./data.js"></script>
