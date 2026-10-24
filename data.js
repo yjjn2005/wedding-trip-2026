@@ -13,7 +13,7 @@ const TRIP = {
   totalDays: 11,
   nights: 9,
   people: "신랑신부 2인",
-  updatedAt: "2026-09-27",   // 데이터 최종 업데이트일 — data.js를 고칠 때마다 이 값도 갱신할 것
+  updatedAt: "2026-10-24",   // 데이터 최종 업데이트일 — data.js를 고칠 때마다 이 값도 갱신할 것
 };
 
 // ---- 개요 탭 핵심 정보(키-값) ----
@@ -253,4 +253,13 @@ const ADDRESSES = [
   { city: "그린델발트", airport: "(인터라켄 경유, 철도 이동)", landmark: "Grindelwald Grund, 3818 Grindelwald, Switzerland", stay: "Jungfrau Lodge Swiss Mountain Hotel, Dorfstrasse 49, Grindelwald ★★★ (Eiger View)" },
   { city: "피렌체", airport: "Aeroporto di Firenze, Via del Termine 11, 50127 Firenze FI", landmark: "Piazza del Duomo, 50122 Firenze FI", stay: "MH Florence Hotel & Spa, Via Luigi Alamanni 37, Firenze ★★★★" },
   { city: "로마", airport: "Aeroporto di Fiumicino (FCO), Via dell'Aeroporto di Fiumicino 320, 00054 Fiumicino RM", landmark: "Fontana di Trevi, Piazza di Trevi, 00187 Roma RM", stay: "The Independent Hotel, Via Volturno 48, Roma ★★★★ Superior" },
+];
+
+// ---- 숙박표: 위 일정표(DAILY)·STOPS 기준. 예약 확정 여부·가격은 원본에 없어 표시하지 않음 ----
+const ACCOMMODATIONS = [
+  { city: "파리", hotel: "Pullman Paris Tour Eiffel", checkin: "11/15", checkout: "11/18", nights: 3 },
+  { city: "루체른", hotel: "Hotel Waldstaetterhof", checkin: "11/18", checkout: "11/19", nights: 1 },
+  { city: "그린델발트", hotel: "Jungfrau Lodge Swiss Mountain Hotel", checkin: "11/19", checkout: "11/21", nights: 2 },
+  { city: "피렌체", hotel: "MH Florence Hotel & Spa", checkin: "11/21", checkout: "11/22", nights: 1 },
+  { city: "로마", hotel: "The Independent Hotel", checkin: "11/22", checkout: "11/24", nights: 2 },
 ];
