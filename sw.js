@@ -1,4 +1,5 @@
-const CACHE = "europe-trip-v3";
+const CACHE = "honeymoon-2026-v4";
+const CACHE_PREFIX = "honeymoon-2026-"; // 이 앱이 만든 캐시만 정리한다(같은 도메인의 다른 앱 캐시는 건드리지 않음)
 const ASSETS = [
   "./",
   "./index.html",
@@ -20,7 +21,7 @@ self.addEventListener("install", event => {
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+      Promise.all(keys.filter(k => k.startsWith(CACHE_PREFIX) && k !== CACHE).map(k => caches.delete(k)))
     ).then(() => self.clients.claim())
   );
 });
@@ -43,6 +44,6 @@ self.addEventListener("fetch", event => {
         caches.open(CACHE).then(cache => cache.put(event.request, resClone));
         return res;
       })
-      .catch(() => caches.match(event.request))
+      .catch(() => caches.open(CACHE).then(c => c.match(event.request)))
   );
 });
