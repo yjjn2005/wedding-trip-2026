@@ -12,20 +12,29 @@ const state = {
 };
 
 // ---------------- Local persistence ----------------
+const LS_STATE = "honeymoon-2026-state";
+const LS_PIN = "honeymoon-2026-pin";
 function loadLocal() {
   try {
-    const raw = localStorage.getItem("europe-trip-state");
+    // 이전 키(europe-trip-*)의 값은 새 키가 비어 있을 때 한 번만 복사한다(기존 체크 유지).
+    if (localStorage.getItem(LS_STATE) === null && localStorage.getItem("europe-trip-state") !== null) {
+      localStorage.setItem(LS_STATE, localStorage.getItem("europe-trip-state"));
+    }
+    if (localStorage.getItem(LS_PIN) === null && localStorage.getItem("europe-trip-pin") !== null) {
+      localStorage.setItem(LS_PIN, localStorage.getItem("europe-trip-pin"));
+    }
+    const raw = localStorage.getItem(LS_STATE);
     if (raw) {
       const parsed = JSON.parse(raw);
       state.checklist = parsed.checklist || {};
       state.daysDone = parsed.daysDone || {};
     }
-    state.pin = localStorage.getItem("europe-trip-pin") || null;
+    state.pin = localStorage.getItem(LS_PIN) || null;
   } catch (e) { /* ignore */ }
 }
 
 function saveLocal() {
-  localStorage.setItem("europe-trip-state", JSON.stringify({
+  localStorage.setItem(LS_STATE, JSON.stringify({
     checklist: state.checklist,
     daysDone: state.daysDone,
   }));
@@ -103,7 +112,7 @@ async function pullSync(showStatus = true) {
 function connectPin(pin) {
   state.pin = pin.trim();
   if (!state.pin) return;
-  localStorage.setItem("europe-trip-pin", state.pin);
+  localStorage.setItem(LS_PIN, state.pin);
   pullSync();
 }
 
@@ -124,12 +133,12 @@ function initTabs() {
 function applyTripMeta() {
   document.title = `${TRIP.title} — ${TRIP.subtitle}`;
   const titleEl = document.getElementById("tripTitle");
-  if (titleEl) titleEl.textContent = `${TRIP.title} · ${TRIP.subtitle}`;
+  if (titleEl) titleEl.innerHTML = `<span class="i-badge" title="Instinct">I</span>${TRIP.title}<small>${TRIP.subtitle}</small>`;
   const subEl = document.querySelector(".app-header .sub");
   if (subEl) {
     const s = new Date(TRIP.start), e = new Date(TRIP.end);
     const fmt = d => `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
-    subEl.textContent = `${fmt(s)} 출발 — ${fmt(e)} 밀라노 출발(인천 도착 익일 예상) · ${TRIP.people}`;
+    subEl.textContent = `${fmt(s)} 인천 출발 — ${fmt(e)} 인천 도착 · ${TRIP.people}`;
   }
 }
 
@@ -140,8 +149,9 @@ function updateHeaderProgress() {
   document.getElementById("progressBar").style.width = pct + "%";
   document.getElementById("progressLabel").textContent = `${done} / ${total}일 완료`;
 
-  const today = new Date();
-  const start = new Date(TRIP.start);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const start = new Date(TRIP.start + "T00:00:00");
   const diffDays = Math.round((start - today) / 86400000);
   const dEl = document.getElementById("dDayLabel");
   if (diffDays > 0) dEl.textContent = `D-${diffDays}`;
@@ -150,9 +160,25 @@ function updateHeaderProgress() {
   else dEl.textContent = "여행 종료";
 }
 
+// ---------------- Today / first-day card ----------------
+function renderTodayCard() {
+  const el = document.getElementById("todayCard");
+  if (!el) return;
+  const start = new Date(TRIP.start + "T00:00:00"), now = new Date();
+  const diff = Math.floor((new Date(now.getFullYear(), now.getMonth(), now.getDate()) - start) / 86400000);
+  let day, title;
+  if (diff < 0) { day = DAILY[0]; title = `출발 전 · D-${-diff} · 첫날 일정 미리보기`; }
+  else if (diff < DAILY.length) { day = DAILY[diff]; title = `오늘 · ${diff + 1}일차`; }
+  else { el.style.display = "none"; return; }
+  const dt = new Date(day.date), wd = ["일","월","화","수","목","금","토"][dt.getDay()];
+  el.innerHTML = `<div class="t">${title}</div><b>${dt.getMonth() + 1}/${dt.getDate()}(${wd}) ${day.city}${day.stay !== "-" ? " · " + day.stay : ""}</b>
+    <div class="tl"><span>오전</span>${day.am}</div><div class="tl"><span>오후</span>${day.pm}</div><div class="tl"><span>저녁</span>${day.eve}</div>`;
+}
+
 // ---------------- Overview ----------------
 function renderOverview() {
   const kv = document.getElementById("overviewKV");
+  renderTodayCard();
   const rows = OVERVIEW_FACTS;
   kv.innerHTML = rows.map(([k, v]) => `<div class="kv-row"><div class="k">${k}</div><div class="v">${v}</div></div>`).join("");
 
@@ -609,17 +635,15 @@ function renderAccommodations() {
   }
   const rows = ACCOMMODATIONS.map(a => `
     <tr>
-      <td>${a.country}</td>
       <td>${a.city}</td>
+      <td>${a.hotel}</td>
       <td>${a.checkin}~${a.checkout}</td>
       <td class="amt">${a.nights}박</td>
-      <td>${a.area}</td>
-      <td class="amt">€${a.eur.toLocaleString("en-US")}</td>
     </tr>
   `).join("");
   el.innerHTML = `
     <table class="budget-table">
-      <thead><tr><th>국가</th><th>도시</th><th>체크인~아웃</th><th>박</th><th>권장 지역</th><th>1박예산</th></tr></thead>
+      <thead><tr><th>도시</th><th>숙소</th><th>체크인~아웃</th><th>박</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>
   `;
@@ -654,6 +678,7 @@ function renderAddresses() {
 
 // ---------------- App info (update date) ----------------
 function renderAppInfo() {
+  const ud = document.getElementById("updDate"); if (ud) ud.textContent = (TRIP.updatedAt || "-").replace(/-/g, ".");
   const el = document.getElementById("appInfoKV");
   if (!el) return;
   el.innerHTML = `
