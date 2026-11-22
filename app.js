@@ -679,6 +679,7 @@ function renderAddresses() {
 // ---------------- App info (update date) ----------------
 function renderAppInfo() {
   const ud = document.getElementById("updDate"); if (ud) ud.textContent = (TRIP.updatedAt || "-").replace(/-/g, ".");
+  const udh = document.getElementById("updDateHead"); if (udh) udh.textContent = (TRIP.updatedAt || "-").replace(/-/g, ".");
   const el = document.getElementById("appInfoKV");
   if (!el) return;
   el.innerHTML = `
