@@ -79,6 +79,12 @@ button {
   overflow-wrap: break-word;
 }
 
+.app-header .upd-head {
+  font-size: 12px;
+  color: #C3CBDA;
+  margin: 2px 0 0;
+}
+
 .app-header .sub {
   font-size: 13px;
   color: #C3CBDA;
