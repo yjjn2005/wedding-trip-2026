@@ -133,7 +133,7 @@ function initTabs() {
 function applyTripMeta() {
   document.title = `${TRIP.title} — ${TRIP.subtitle}`;
   const titleEl = document.getElementById("tripTitle");
-  if (titleEl) titleEl.innerHTML = `<span class="i-badge" title="Instinct">I</span>${TRIP.title}<small>${TRIP.subtitle}</small>`;
+  if (titleEl) titleEl.innerHTML = `${TRIP.title}<small>${TRIP.subtitle}</small>`;
   const subEl = document.querySelector(".app-header .sub");
   if (subEl) {
     const s = new Date(TRIP.start), e = new Date(TRIP.end);
